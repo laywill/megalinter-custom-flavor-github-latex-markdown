@@ -180,6 +180,15 @@ requests. This project follows a [Code of Conduct](CODE_OF_CONDUCT.md). See
 
 ## License
 
-Licensed under the [Apache License 2.0](LICENSE).
+Licensed under the [GNU Affero General Public License v3.0](LICENSE).
+
+This repository exists to repackage [MegaLinter](https://github.com/oxsecurity/megalinter),
+which is licensed under AGPL-3.0, and the container image it publishes bundles
+MegaLinter and the linters listed above. It is licensed AGPL-3.0 to match
+upstream rather than to make any claim about where the boundary of that
+licence falls. Corresponding source for the MegaLinter components of the
+published image is available at
+<https://github.com/oxsecurity/megalinter>; each embedded linter remains under
+its own licence.
 
 [![MegaLinter is graciously provided by OX Security](https://raw.githubusercontent.com/oxsecurity/megalinter/main/docs/assets/images/ox-banner.png)](https://www.ox.security/?ref=megalinter)
