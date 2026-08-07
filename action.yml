@@ -1,0 +1,14 @@
+---
+name: "MegaLinter Custom Flavor: GitHub LaTeX Markdown"
+author: "William Lay"
+description: "MegaLinter Custom Flavor GitHub LaTeX Markdown"
+outputs:
+  has_updated_sources:
+    description: "0 if no source file has been updated, 1 if source files has been updated"
+runs:
+  using: "docker"
+  # You can manually update the Docker image version here, or use the latest tag
+  image: "docker://ghcr.io/laywill/megalinter-custom-flavor-github-latex-markdown/megalinter-custom-flavor:latest"
+branding:
+  icon: "check"
+  color: "green"

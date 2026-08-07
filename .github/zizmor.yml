@@ -1,0 +1,15 @@
+---
+# zizmor configuration
+# https://docs.zizmor.sh/configuration/
+
+rules:
+  unpinned-uses:
+    config:
+      # Everything is hash-pinned (and kept current by Dependabot), with one
+      # deliberate exception: MegaLinter's custom flavor builder tracks @main,
+      # as its Custom Flavors guide instructs, so that the image we publish is
+      # always built by the builder matching the upstream release we are
+      # building. Pinning it would strand this flavor on an old builder.
+      policies:
+        oxsecurity/megalinter/flavors/custom-builder: ref-pin
+        "*": hash-pin

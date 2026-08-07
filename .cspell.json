@@ -22,7 +22,39 @@
     "companies"
   ],
   // Add project-specific terms here as they come up, e.g. "words": ["myterm"]
-  "words": ["laywill", "Linters", "LINTERS", "JSONLINT"],
+  "words": [
+    "laywill",
+    "Linters",
+    "LINTERS",
+    // MegaLinter ecosystem. flavor/flavors are US spellings, kept as-is
+    // under en-GB because they are MegaLinter's own terminology.
+    "megalinter",
+    "oxsecurity",
+    "flavor",
+    "flavors",
+    "ghcr",
+    "DOCKERHUB",
+    "SBOM",
+    "zizmor",
+    "artipacked",
+    // Linter keys embedded in this flavor
+    "ACTIONLINT",
+    "BETTERLEAKS",
+    "CHKTEX",
+    "DEVSKIM",
+    "DUSTILOCK",
+    "GITLEAKS",
+    "GRYPE",
+    "JSONLINT",
+    "KINGFISHER",
+    "MARKDOWNLINT",
+    "SECRETLINT",
+    "SYFT",
+    "TRUFFLEHOG",
+    "YAMLLINT",
+    "lychee",
+    "trivy"
+  ],
   "ignorePaths": [
     ".git",
     ".github",
