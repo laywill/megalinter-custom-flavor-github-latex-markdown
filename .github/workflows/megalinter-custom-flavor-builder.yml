@@ -1,0 +1,130 @@
+---
+# =============================================================
+# Build MegaLinter Custom Flavor Workflow
+#
+# This workflow builds and publishes a custom MegaLinter Docker image
+# to GitHub Container Registry (ghcr.io) and optionally Docker Hub.
+#
+# Usage:
+# - Triggers on push, release, or manual dispatch.
+# - Tags the image with the release tag (on release) or 'alpha' (otherwise).
+# - Pushes to ghcr.io and, if credentials are set, to Docker Hub.
+#
+# Required repository secrets:
+#   - GITHUB_TOKEN: Provided by GitHub Actions (for ghcr.io push)
+#   - DOCKERHUB_USERNAME: (optional) Docker Hub username for push
+#   - DOCKERHUB_PASSWORD: (optional) Docker Hub password/token for push
+#
+# Optional repository variables:
+#   - DOCKERHUB_REPO: Docker Hub repository name (e.g. nvuillam)
+#
+# The MegaLinter custom flavor image will be available at:
+#   - ghcr.io/<owner>/<repo>:<tag>
+#   - docker.io/<dockerhub_repo>/<repo>:<tag> (if Docker Hub credentials are set)
+# =============================================================
+name: Build & Push MegaLinter Custom Flavor
+
+on:
+  push:
+    branches-ignore: [main]
+  release:
+    types: [edited, published]
+  workflow_dispatch:
+    inputs:
+      megalinter-version:
+        description: "MegaLinter version to build (e.g., v7.5.0)"
+        required: false
+        type: string
+      is-latest:
+        description: "Mark this version as latest"
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  build-custom-flavor:
+    name: Build Custom MegaLinter Flavor
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Determine MegaLinter Version Tag
+        id: determine-tag
+        env:
+          INPUT_MEGALINTER_VERSION: ${{ inputs.megalinter-version }}
+          INPUT_IS_LATEST: ${{ inputs.is-latest }}
+          EVENT_NAME: ${{ github.event_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          if [ -n "${INPUT_MEGALINTER_VERSION}" ]; then
+            TAG="${INPUT_MEGALINTER_VERSION}"
+            echo "Using workflow input version: $TAG"
+          elif [ "${EVENT_NAME}" == "release" ]; then
+            TAG="${RELEASE_TAG}"
+            echo "Using release tag: $TAG"
+          else
+            TAG="beta"
+            echo "Using default tag: $TAG"
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+          # Determine is-latest flag
+          if [ "${EVENT_NAME}" == "workflow_dispatch" ]; then
+            IS_LATEST="${INPUT_IS_LATEST}"
+            echo "Using workflow input is-latest: $IS_LATEST"
+          elif [ "${EVENT_NAME}" == "release" ]; then
+            IS_LATEST="true"
+            echo "Release event - is-latest: true"
+          else
+            IS_LATEST="false"
+            echo "Default is-latest: false"
+          fi
+          echo "is-latest=$IS_LATEST" >> $GITHUB_OUTPUT
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Log in to Docker Hub only if credentials are provided
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: docker.io
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        continue-on-error: true
+
+      - name: Set Lowercase Repository Name
+        id: lowercase-repo
+        run: echo "repo=$(echo "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+
+      - name: Build MegaLinter Custom Flavor
+        uses: oxsecurity/megalinter/flavors/custom-builder@main
+        with:
+          megalinter-custom-flavor-builder-tag: ${{ steps.determine-tag.outputs.tag }}
+          platform: "linux/amd64"
+          is-latest: ${{ steps.determine-tag.outputs.is-latest }}
+          upload-to-ghcr: "true"
+          upload-to-dockerhub: ${{ secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_PASSWORD != '' && 'true' || 'false' }}
+          dockerhub-repo: ${{ vars.DOCKERHUB_REPO }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_FLAVOR_BUILD_REPO: ${{ steps.lowercase-repo.outputs.repo }}
+          CUSTOM_FLAVOR_BUILD_REPO_URL: ${{ github.repositoryUrl }}
+          CUSTOM_FLAVOR_BUILD_USER: ${{ github.actor }}
