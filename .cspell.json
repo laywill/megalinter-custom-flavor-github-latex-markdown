@@ -37,6 +37,10 @@
     "SBOM",
     "zizmor",
     "artipacked",
+    // Upstream maintainers and linter image authors, cited in docs/upstream
+    "nvuillam",
+    "rhysd",
+    "mstruebing",
     // Linter keys embedded in this flavor
     "ACTIONLINT",
     "BETTERLEAKS",
