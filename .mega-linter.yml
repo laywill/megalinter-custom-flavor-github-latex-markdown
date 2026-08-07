@@ -29,16 +29,23 @@ SPELL_LYCHEE_ARGUMENTS: "--exclude 'issues/new/choose'"
 JSON_JSONLINT_ARGUMENTS: "--comments --trailing-newline --trailing-commas"
 
 # CSpell Config
-SPELL_CSPELL_FILTER_REGEX_EXCLUDE: (\.cspell\.json|\.gitignore)
+# Exclude LICENSE for the same reason as editorconfig-checker below: it is
+# verbatim licence text and cannot be edited, and the AGPL text uses US
+# spellings that this repo's en-GB dictionary rejects. Adding those words to
+# .cspell.json would wrongly permit them in our own prose.
+SPELL_CSPELL_FILTER_REGEX_EXCLUDE: (\.cspell\.json|\.gitignore|LICENSE)
 
 # EditorConfig Checker Config
-# Exclude LICENSE: it is the canonical Apache License 2.0 text copied
-# verbatim from apache.org and should not be reformatted to satisfy
-# indent-size rules.
+# Exclude LICENSE: it is the canonical GNU AGPL v3.0 text copied verbatim
+# from gnu.org and should not be reformatted to satisfy indent-size rules.
 EDITORCONFIG_EDITORCONFIG_CHECKER_FILTER_REGEX_EXCLUDE: (LICENSE)
 
 # Filter Configuration
 FILTER_REGEX_EXCLUDE: (\.git|\.venv|\.pytest_cache|\.vscode|__pycache__)
 
 # Checkov Configuration
-REPOSITORY_CHECKOV_ARGUMENTS: "--skip-check CKV2_GHA_1"
+# CKV_GHA_7 requires workflow_dispatch inputs to be empty. The custom flavor
+# builder needs them: check-new-megalinter-version.yml dispatches it with
+# --field megalinter-version / --field is-latest to build a specific
+# upstream release, so the inputs cannot be removed.
+REPOSITORY_CHECKOV_ARGUMENTS: "--skip-check CKV2_GHA_1,CKV_GHA_7"
