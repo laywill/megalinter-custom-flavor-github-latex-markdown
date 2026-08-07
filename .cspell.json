@@ -26,13 +26,14 @@
     "laywill",
     "Linters",
     "LINTERS",
-    // MegaLinter ecosystem. Note "flavor"/"flavors" are US spellings, but
-    // they are MegaLinter's own terminology so they stay as-is under en-GB.
+    // MegaLinter ecosystem. flavor/flavors are US spellings, kept as-is
+    // under en-GB because they are MegaLinter's own terminology.
     "megalinter",
     "oxsecurity",
     "flavor",
     "flavors",
     "ghcr",
+    "DOCKERHUB",
     "SBOM",
     "zizmor",
     "artipacked",

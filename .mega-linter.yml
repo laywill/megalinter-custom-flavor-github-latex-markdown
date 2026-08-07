@@ -41,4 +41,8 @@ EDITORCONFIG_EDITORCONFIG_CHECKER_FILTER_REGEX_EXCLUDE: (LICENSE)
 FILTER_REGEX_EXCLUDE: (\.git|\.venv|\.pytest_cache|\.vscode|__pycache__)
 
 # Checkov Configuration
-REPOSITORY_CHECKOV_ARGUMENTS: "--skip-check CKV2_GHA_1"
+# CKV_GHA_7 requires workflow_dispatch inputs to be empty. The custom flavor
+# builder needs them: check-new-megalinter-version.yml dispatches it with
+# --field megalinter-version / --field is-latest to build a specific
+# upstream release, so the inputs cannot be removed.
+REPOSITORY_CHECKOV_ARGUMENTS: "--skip-check CKV2_GHA_1,CKV_GHA_7"
