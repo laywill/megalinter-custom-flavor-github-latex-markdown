@@ -79,11 +79,11 @@ npx mega-linter-runner \
 
 ### Available image tags
 
-| Tag                    | Built from                                     |
-| ---------------------- | ---------------------------------------------- |
-| `latest`               | The most recent release                        |
-| `v9.6.0` (release tag) | The matching upstream MegaLinter release       |
-| `beta`                 | Pushes to any branch other than `main`         |
+| Tag                    | Built from                               |
+|------------------------|------------------------------------------|
+| `latest`               | The most recent release                  |
+| `v9.6.0` (release tag) | The matching upstream MegaLinter release |
+| `beta`                 | Pushes to any branch other than `main`   |
 
 ## How the flavor is built and updated
 
