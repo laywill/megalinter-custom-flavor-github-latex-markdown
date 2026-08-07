@@ -116,7 +116,11 @@ jobs:
         run: echo "repo=$(echo "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
 
       - name: Build MegaLinter Custom Flavor
-        uses: oxsecurity/megalinter/flavors/custom-builder@ef3e84b8b836d76db562d0f3ed7da61e8fd538bc  # v9.6.0
+        # Deliberately tracks @main, as MegaLinter's Custom Flavors guide
+        # instructs. The builder is expected to stay in step with upstream
+        # releases, so pinning it would strand the flavor on an old builder.
+        # Allowed by the unpinned-uses policy in .github/zizmor.yml.
+        uses: oxsecurity/megalinter/flavors/custom-builder@main
         with:
           megalinter-custom-flavor-builder-tag: ${{ steps.determine-tag.outputs.tag }}
           platform: "linux/amd64"
