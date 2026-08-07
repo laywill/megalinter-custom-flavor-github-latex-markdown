@@ -117,3 +117,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,macos,visualstudiocode,git
+
+# Local scratch: drafts of issues to be filed against upstream projects.
+# Kept out of the repo so they do not become stale documentation.
+docs/
