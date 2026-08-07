@@ -29,7 +29,11 @@ SPELL_LYCHEE_ARGUMENTS: "--exclude 'issues/new/choose'"
 JSON_JSONLINT_ARGUMENTS: "--comments --trailing-newline --trailing-commas"
 
 # CSpell Config
-SPELL_CSPELL_FILTER_REGEX_EXCLUDE: (\.cspell\.json|\.gitignore)
+# Exclude LICENSE for the same reason as editorconfig-checker below: it is
+# verbatim licence text and cannot be edited, and the AGPL text uses US
+# spellings that this repo's en-GB dictionary rejects. Adding those words to
+# .cspell.json would wrongly permit them in our own prose.
+SPELL_CSPELL_FILTER_REGEX_EXCLUDE: (\.cspell\.json|\.gitignore|LICENSE)
 
 # EditorConfig Checker Config
 # Exclude LICENSE: it is the canonical GNU AGPL v3.0 text copied verbatim
